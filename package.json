@@ -1,12 +1,10 @@
 {
-  "name": "cendekia-aksara-simple",
+  "name": "proyek-ai-saya",
   "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "serve src",
-    "dev": "vercel dev"
-  },
+  "type": "module",
   "dependencies": {
-    "firebase": "^10.8.0"
+    "@google/generative-ai": "^0.16.0"
   }
+
 }
+
