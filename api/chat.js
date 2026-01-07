@@ -22,7 +22,7 @@ export default async function handler(request, response) {
         Berikan contoh 'Bedah Kutipan' dari sebuah novel terkenal. Penulis: Aksa AI.`;
 
         // 4. Panggil Google Gemini (Dari sisi server, jadi aman!)
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         
         const fetchResponse = await fetch(geminiUrl, {
             method: 'POST',
