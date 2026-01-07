@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/chat?secret=Cendekia2026Aman&type=artikel",
+      "schedule": "0 7 * * *" 
+    },
+    {
+      "path": "/api/chat?secret=Cendekia2026Aman&type=materi",
+      "schedule": "0 8 * * 1" 
+    }
+  ]
+}
