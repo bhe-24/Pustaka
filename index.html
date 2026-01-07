@@ -3,89 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Materi Novel - Cendekia Aksara</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Pustaka Materi Cendekia Aksara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        :root { --primary: #005a9c; --secondary: #004475; --accent: #f7a04a; --bg-light: #f8f9fa; --white: #ffffff; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-light); color: #333; margin: 0; padding: 0; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        
-        /* Header & Nav */
-        header { background: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; cursor: pointer; }
-        
-        /* AI Box */
-        .ai-box { background: #e3f2fd; padding: 25px; border-radius: 15px; border: 2px dashed var(--primary); margin: 30px 0; text-align: center; }
-        .input-group { display: flex; gap: 10px; max-width: 600px; margin: 15px auto; }
-        input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; }
-        button { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        button:hover { background: var(--secondary); }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-
-        /* Grid Layout */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border: 1px solid var(--primary); }
-        .card-img { height: 180px; background: #ddd; background-size: cover; background-position: center; }
-        .card-body { padding: 20px; }
-        .card-title { margin: 0 0 10px; font-size: 1.1rem; color: var(--secondary); }
-        .date { font-size: 0.8rem; color: #888; }
-
-        /* Detail View */
-        #detail-view { background: white; min-height: 100vh; padding: 40px; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; overflow-y: auto; display: none; box-sizing: border-box; }
-        .close-btn { position: fixed; top: 20px; right: 20px; background: #eee; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
-        .content-body { max-width: 800px; margin: 0 auto; font-family: 'Merriweather', serif; line-height: 1.8; font-size: 1.1rem; }
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .prose h1, .prose h2, .prose h3 { font-family: 'Merriweather', serif; color: #1e293b; }
+        .tab-active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <header>
-        <div class="container nav-flex">
-            <div class="logo" onclick="location.reload()"><i class="fa-solid fa-feather-pointed"></i> Cendekia Aksara</div>
-            <div id="auth-status" style="font-size: 0.9rem; color: #666;">Mode Tamu</div>
-        </div>
-    </header>
-
-    <div class="container">
-        
-        <!-- KOLOM INPUT AI -->
-        <div class="ai-box">
-            <h3><i class="fa-solid fa-robot"></i> Asisten Penulis Aksa</h3>
-            <p>Minta Aksa membuat materi novel khusus untukmu.</p>
-            <div class="input-group">
-                <input type="text" id="topic-input" placeholder="Contoh: Cara membuat plot twist yang mengejutkan...">
-                <button id="btn-generate"><i class="fa-solid fa-paper-plane"></i> Buat</button>
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-xl font-serif font-bold text-slate-800">Cendekia Aksara</span>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">AI Library</span>
+                </div>
             </div>
-            <div id="loading-msg" style="display:none; color: var(--primary); margin-top: 10px;">
-                <i class="fa-solid fa-spinner fa-spin"></i> Sedang menulis... (bisa memakan waktu 10-20 detik)
+            <div class="flex space-x-8 -mb-px">
+                <button onclick="switchTab('artikel')" id="tab-artikel" class="tab-active py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition">
+                    Artikel Harian
+                </button>
+                <button onclick="switchTab('materi')" id="tab-materi" class="py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition">
+                    Materi Mingguan
+                </button>
             </div>
         </div>
+    </nav>
 
-        <h2 style="border-left: 5px solid var(--accent); padding-left: 15px; color: var(--secondary);">Pustaka Materi</h2>
-        <div id="content-grid" class="grid">
-            <div style="text-align:center; padding:40px; color:#999; grid-column: 1/-1;">Sedang memuat pustaka...</div>
-        </div>
+    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div id="loading" class="text-center py-10 text-gray-500 animate-pulse">Memuat Pustaka...</div>
+        <div id="content-container" class="space-y-8 hidden">
+            </div>
+    </main>
 
-    </div>
+    <footer class="bg-white border-t mt-auto py-6 text-center text-sm text-gray-500">
+        &copy; 2026 Pustaka Cendekia Aksara. Managed by AI.
+    </footer>
 
-    <!-- DETAIL VIEW OVERLAY -->
-    <div id="detail-view">
-        <div class="close-btn" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i></div>
-        <div id="detail-content" class="content-body"></div>
-    </div>
-
-    <!-- SCRIPT (LOGIC) -->
     <script type="module">
-        // Import Firebase dari CDN (Tidak perlu install npm di komputer)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, getDocs, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, query, orderByChild, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // KONFIGURASI FIREBASE (Aman ditaruh di sini karena untuk publik)
+        // GANTI DENGAN CONFIG FIREBASE KAMU
         const firebaseConfig = {
-            apiKey: "AIzaSyDpUWUIzPXIZN6rrNtsIqcL6VfOE2RLVl0", 
+            apiKey: "AIzaSyDpUWUIzPXIZN6rrNtsIqcL6VfOE2RLVl0",
             authDomain: "mading-cf676.firebaseapp.com",
             projectId: "mading-cf676",
             storageBucket: "mading-cf676.firebasestorage.app",
@@ -94,123 +61,67 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        let allMaterials = [];
+        const db = getDatabase(app);
 
-        // --- 1. FUNGSI MEMANGGIL AI (VIA SERVER VERCEL) ---
-        const btnGenerate = document.getElementById('btn-generate');
-        const inputTopic = document.getElementById('topic-input');
-        const loadingMsg = document.getElementById('loading-msg');
+        let currentTab = 'artikel';
+        let allData = [];
 
-        btnGenerate.addEventListener('click', async () => {
-            const topic = inputTopic.value.trim();
-            if(!topic) return alert("Isi topiknya dulu dong!");
+        // Fungsi Render Data
+        window.renderData = (type) => {
+            const container = document.getElementById('content-container');
+            container.innerHTML = '';
+            
+            const filtered = allData.filter(item => item.type === type).sort((a, b) => b.timestamp - a.timestamp);
 
-            // UI Loading
-            btnGenerate.disabled = true;
-            loadingMsg.style.display = 'block';
-
-            try {
-                // PANGGIL BACKEND KITA SENDIRI (api/chat.js)
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    body: JSON.stringify({ topic: topic })
-                });
-
-                // Cek status error sebelum parsing JSON
-                if (response.status === 500) {
-                     // Ini menangani error spesifik "API Key belum disetting" dari backend
-                    throw new Error("Server Error (500). Kemungkinan API Key belum terbaca. Coba REDEPLOY di dashboard Vercel.");
-                }
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || "Gagal menghubungi AI");
-                }
-
-                // Proses Hasil
-                const rawText = data.result;
-                const lines = rawText.split('\n');
-                const title = lines[0].replace(/#|\*/g, '').trim();
-                const content = lines.slice(1).join('\n');
-
-                // Simpan ke Firebase
-                await addDoc(collection(db, 'materials'), {
-                    title: title,
-                    content: content,
-                    category: 'Artikel',
-                    topic: 'Request User',
-                    createdAt: serverTimestamp(),
-                    imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1000'
-                });
-
-                alert("Berhasil! Artikel sudah terbit.");
-                inputTopic.value = '';
-                loadMaterials(); // Refresh halaman
-
-            } catch (err) {
-                console.error(err);
-                alert("Ups, ada masalah: " + err.message);
-            } finally {
-                btnGenerate.disabled = false;
-                loadingMsg.style.display = 'none';
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-400">Belum ada konten ${type}.</div>`;
+                return;
             }
-        });
 
-        // --- 2. FUNGSI LOAD DATA DARI FIREBASE ---
-        async function loadMaterials() {
-            const grid = document.getElementById('content-grid');
-            try {
-                const q = query(collection(db, 'materials'), orderBy('createdAt', 'desc'));
-                const snap = await getDocs(q);
-                
-                if (snap.empty) {
-                    grid.innerHTML = '<p style="text-align:center;">Belum ada materi.</p>';
-                    return;
-                }
+            filtered.forEach(item => {
+                // Konversi Markdown ke HTML
+                const htmlContent = marked.parse(item.content);
+                const date = new Date(item.timestamp).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-                allMaterials = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-                grid.innerHTML = allMaterials.map(item => `
-                    <div class="card" onclick="openDetail('${item.id}')">
-                        <div class="card-img" style="background-image: url('${item.imageUrl || ''}')"></div>
-                        <div class="card-body">
-                            <h3 class="card-title">${item.title}</h3>
-                            <div class="date">${item.createdAt ? new Date(item.createdAt.seconds*1000).toLocaleDateString() : 'Baru saja'}</div>
+                const card = document.createElement('article');
+                card.className = "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300";
+                card.innerHTML = `
+                    <div class="p-6 sm:p-8">
+                        <div class="flex items-center gap-2 mb-4 text-sm text-gray-500">
+                            <span class="font-medium text-blue-600 uppercase tracking-wider text-xs">${item.topic || 'Umum'}</span>
+                            <span>&bull;</span>
+                            <time>${date}</time>
+                        </div>
+                        <h2 class="text-2xl font-serif font-bold text-gray-900 mb-4">${item.title}</h2>
+                        <div class="prose prose-slate prose-lg max-w-none prose-headings:font-serif prose-a:text-blue-600 prose-table:border prose-th:bg-gray-50 prose-th:p-2 prose-td:p-2">
+                            ${htmlContent}
                         </div>
                     </div>
-                `).join('');
+                `;
+                container.appendChild(card);
+            });
 
-            } catch (e) {
-                grid.innerHTML = `<p style="color:red; text-align:center;">Gagal memuat data: ${e.message}</p>`;
-            }
-        }
-
-        // --- 3. FUNGSI BUKA DETAIL ---
-        window.openDetail = (id) => {
-            const item = allMaterials.find(m => m.id === id);
-            if(!item) return;
-            
-            const detailView = document.getElementById('detail-view');
-            const detailContent = document.getElementById('detail-content');
-            
-            detailContent.innerHTML = `
-                <h1 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 10px;">${item.title}</h1>
-                <p style="color:#666; margin-bottom: 30px;">Dibuat pada: ${new Date(item.createdAt.seconds*1000).toLocaleDateString()}</p>
-                <hr style="border:0; border-top:1px solid #eee; margin-bottom:30px;">
-                ${item.content}
-            `;
-            detailView.style.display = 'block';
+            document.getElementById('loading').classList.add('hidden');
+            container.classList.remove('hidden');
         };
 
-        window.closeDetail = () => {
-            document.getElementById('detail-view').style.display = 'none';
+        // Switch Tab Logic
+        window.switchTab = (tab) => {
+            currentTab = tab;
+            document.getElementById('tab-artikel').className = tab === 'artikel' ? 'tab-active py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500' : 'py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700';
+            document.getElementById('tab-materi').className = tab === 'materi' ? 'tab-active py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500' : 'py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700';
+            renderData(tab);
         };
 
-        // Jalankan saat web dibuka
-        loadMaterials();
-
+        // Fetch Data Realtime
+        const postsRef = query(ref(db, 'posts'), orderByChild('timestamp'));
+        onValue(postsRef, (snapshot) => {
+            allData = [];
+            snapshot.forEach((childSnapshot) => {
+                allData.push(childSnapshot.val());
+            });
+            renderData(currentTab);
+        });
     </script>
 </body>
 </html>
