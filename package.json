@@ -1,0 +1,12 @@
+{
+  "name": "cendekia-aksara-simple",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "serve src",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "firebase": "^10.8.0"
+  }
+}
