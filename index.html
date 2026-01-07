@@ -117,6 +117,12 @@
                     body: JSON.stringify({ topic: topic })
                 });
 
+                // Cek status error sebelum parsing JSON
+                if (response.status === 500) {
+                     // Ini menangani error spesifik "API Key belum disetting" dari backend
+                    throw new Error("Server Error (500). Kemungkinan API Key belum terbaca. Coba REDEPLOY di dashboard Vercel.");
+                }
+
                 const data = await response.json();
 
                 if (!response.ok) {
